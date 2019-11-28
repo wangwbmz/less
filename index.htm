@@ -1,0 +1,440 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="gb2312">
+<meta name="robots" content="all" />
+<meta name="author" content="Tencent-TGideas" />
+<meta name="Copyright" content="Tencent" />
+<meta name="applicable-device" content="pc">
+<meta name="mobile-agent" content="format=html5;url=/m/">
+<meta name="Description" content="" />
+<meta name="Keywords" content="" />
+<title>Less学习</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+        <div class="blogpost-body">            
+            <p><span>LESS 做为 CSS 的一种形式的扩展，它并没有阉割 CSS 的功能，而是在现有的 CSS 语法上，添加了很多额外的功能，所以学习 LESS 是一件轻而易举的事情，果断学习之！</span></p>
+            <p><strong>Less两种使用方式</strong></p>
+            <p>一种、nodejs安装完之后，再使用：npm install -g less 全局安装。可以查看版本lessc -v是否安装成功。然后在index.htm中引入编译后的style.css（通过nodejs编译）文件</p>
+            <p>二种、直接在页面上引用link href="style.less" 加上js文件比如：//cdnjs.cloudflare.com/ajax/libs/less.js/3.10.0-beta/less.min.js </p>
+
+            <p>本文介绍的第一种方法：在命令窗口执行 lessc style.less style.css，刷新index.htm就可以看到效果</p>
+
+            <p><span>变量</span></p>
+            <p><span>很容易理解:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@nice-blue:</span> <span class="hljs-number">#5B83AD</span>;
+            <span class="hljs-variable">@light-blue:</span> <span class="hljs-variable">@nice-blue</span> + <span class="hljs-number">#111</span>;
+            
+            <span class="hljs-selector-id">#header</span> { <span class="hljs-attribute">color</span>: <span class="hljs-variable">@light-blue</span>; }
+            </span></code></pre>
+            <p><span>输出:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-id">#header</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#6c94be</span>; }
+            </span></code></pre>
+            <p><span>甚至可以用变量名定义为变量:</span></p>
+            <pre><span><code class="hljs less"><span class="hljs-variable">@var:</span> '</code>I am fnord.';</span></pre>
+            <pre><code class="hljs less"><span><span class="hljs-attribute">content</span>: <span class="hljs-variable">@var</span>;
+            </span></code></pre>
+            <p><span>解析后:</span></p>
+            <pre><code class="hljs scss"><span><span class="hljs-attribute">content</span>: <span class="hljs-string">"I am fnord."</span>;
+            </span></code></pre>
+            <p><span>请注意 LESS 中的变量为完全的 ‘常量’ ，所以只能定义一次.</span></p>
+            <h2><span>混合</span></h2>
+            <p><span>在 LESS 中我们可以定义一些通用的属性集为一个class，然后在另一个class中去调用这些属性. 下面有这样一个class:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-class">.bordered</span> {
+              <span class="hljs-attribute">border-top</span>: dotted <span class="hljs-number">1px</span> black;
+              <span class="hljs-attribute">border-bottom</span>: solid <span class="hljs-number">2px</span> black;
+            }
+            </span></code></pre>
+            <p><span>那如果我们现在需要在其他class中引入那些通用的属性集，那么我们只需要在任何class中像下面这样调用就可以了:</span></p>
+            <pre><code class="hljs scss"><span><span class="hljs-selector-id">#menua</span> {
+              <span class="hljs-attribute">color</span>: <span class="hljs-number">#111</span>;
+              <span class="hljs-selector-class">.bordered</span>;
+            }
+            <span class="hljs-selector-class">.posta</span> {
+              <span class="hljs-attribute">color</span>: red;
+              <span class="hljs-selector-class">.bordered</span>;
+            }
+            </span></code></pre>
+            <p><span><code>.bordered</code>&nbsp;class里面的属性样式都会在&nbsp;<code>#menu a</code>&nbsp;和&nbsp;<code>.post a</code>中体现出来:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-id">#menua</span> {
+              <span class="hljs-attribute">color</span>: <span class="hljs-number">#111</span>;
+              <span class="hljs-attribute">border-top</span>: dotted <span class="hljs-number">1px</span> black;
+              <span class="hljs-attribute">border-bottom</span>: solid <span class="hljs-number">2px</span> black;
+            }
+            <span class="hljs-selector-class">.posta</span> {
+              <span class="hljs-attribute">color</span>: red;
+              <span class="hljs-attribute">border-top</span>: dotted <span class="hljs-number">1px</span> black;
+              <span class="hljs-attribute">border-bottom</span>: solid <span class="hljs-number">2px</span> black;
+            }
+            </span></code></pre>
+            <p><span>任何 CSS&nbsp;<em>class</em>,&nbsp;<em>id</em>&nbsp;或者&nbsp;<em>元素</em>&nbsp;属性集都可以以同样的方式引入.</span></p>
+            <h2><span>带参数混合</span></h2>
+            <p><span>在 LESS 中，你还可以像函数一样定义一个带参数的属性集合:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.border-radius</span> (<span class="hljs-variable">@radius</span>) {
+              <span class="hljs-attribute">border-radius</span>: <span class="hljs-variable">@radius</span>;
+              <span class="hljs-attribute">-moz-border-radius</span>: <span class="hljs-variable">@radius</span>;
+              <span class="hljs-attribute">-webkit-border-radius</span>: <span class="hljs-variable">@radius</span>;
+            }
+            </span></code></pre>
+            <p><span>然后在其他class中像这样调用它:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-id">#header</span> {
+              <span class="hljs-selector-class">.border-radius</span>(<span class="hljs-number">4px</span>);
+            }
+            <span class="hljs-selector-class">.button</span> {
+              <span class="hljs-selector-class">.border-radius</span>(<span class="hljs-number">6px</span>);  
+            }
+            </span></code></pre>
+            <p><span>我们还可以像这样给参数设置默认值:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.border-radius</span> (<span class="hljs-variable">@radius</span>: <span class="hljs-number">5px</span>) {
+              <span class="hljs-attribute">border-radius</span>: <span class="hljs-variable">@radius</span>;
+              <span class="hljs-attribute">-moz-border-radius</span>: <span class="hljs-variable">@radius</span>;
+              <span class="hljs-attribute">-webkit-border-radius</span>: <span class="hljs-variable">@radius</span>;
+            }
+            </span></code></pre>
+            <p><span>所以现在如果我们像这样调用它的话:</span></p>
+            <pre><code class="hljs shell"><span><span class="hljs-meta">#</span><span class="bash">header {</span>
+              .border-radius;  
+            }
+            </span></code></pre>
+            <p><span>radius的值就会是5px.</span></p>
+            <p><span>你也可以定义不带参数属性集合,如果你想隐藏这个属性集合，不让它暴露到CSS中去，但是你还想在其他的属性集合中引用，你会发现这个方法非常的好用:</span></p>
+            <pre><code class="hljs lua"><span>.<span class="hljs-built_in">wrap</span> () {
+              text-<span class="hljs-built_in">wrap</span>: <span class="hljs-built_in">wrap</span>;
+              white-space: pre-<span class="hljs-built_in">wrap</span>;
+              white-space: -moz-pre-<span class="hljs-built_in">wrap</span>;
+              word-<span class="hljs-built_in">wrap</span>: <span class="hljs-keyword">break</span>-word;
+            }
+            
+            pre { .<span class="hljs-built_in">wrap</span> }
+            </span></code></pre>
+            <p><span>输出:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-tag">pre</span> {
+              <span class="hljs-attribute">text-wrap</span>: wrap;
+              <span class="hljs-attribute">white-space</span>: pre-wrap;
+              <span class="hljs-attribute">white-space</span>: -moz-pre-wrap;
+              <span class="hljs-attribute">word-wrap</span>: break-word;
+            }
+            </span></code></pre>
+            <h3><span><code>@arguments</code>&nbsp;变量</span></h3>
+            <p><span><code>@arguments</code>包含了所有传递进来的参数. 如果你不想单独处理每一个参数的话就可以像这样写:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.box-shadow</span> (<span class="hljs-variable">@x</span>: <span class="hljs-number">0</span>, <span class="hljs-variable">@y</span>: <span class="hljs-number">0</span>, <span class="hljs-variable">@blur</span>: <span class="hljs-number">1px</span>, <span class="hljs-variable">@color</span>: <span class="hljs-number">#000</span>) {
+              <span class="hljs-attribute">box-shadow</span>: <span class="hljs-variable">@arguments</span>;
+              <span class="hljs-attribute">-moz-box-shadow</span>: <span class="hljs-variable">@arguments</span>;
+              <span class="hljs-attribute">-webkit-box-shadow</span>: <span class="hljs-variable">@arguments</span>;
+            }
+            <span class="hljs-selector-class">.box-shadow</span>(<span class="hljs-number">2px</span>, <span class="hljs-number">5px</span>);
+            </span></code></pre>
+            <p><span>将会输出:</span></p>
+            <pre><code class="hljs scss"><span><span class="hljs-attribute">box-shadow</span>: <span class="hljs-number">2px</span> <span class="hljs-number">5px</span> <span class="hljs-number">1px</span> <span class="hljs-number">#000</span>;
+              -moz-<span class="hljs-attribute">box-shadow</span>: <span class="hljs-number">2px</span> <span class="hljs-number">5px</span> <span class="hljs-number">1px</span> <span class="hljs-number">#000</span>;
+              -webkit-<span class="hljs-attribute">box-shadow</span>: <span class="hljs-number">2px</span> <span class="hljs-number">5px</span> <span class="hljs-number">1px</span> <span class="hljs-number">#000</span>;
+            </span></code></pre>
+            <h2><span>模式匹配和导引表达式</span></h2>
+            <p><span>有些情况下，我们想根据传入的参数来改变混合的默认呈现，比如下面这个例子：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@s</span>, <span class="hljs-variable">@color</span>) { ... }
+            
+            <span class="hljs-selector-class">.class</span> {
+              <span class="hljs-selector-class">.mixin</span>(<span class="hljs-variable">@switch</span>, <span class="hljs-number">#888</span>);
+            }
+            </span></code></pre>
+            <p><span>如果想让<code>.mixin</code>根据不同的<code>@switch</code>值而表现各异，如下这般设置：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (dark, <span class="hljs-variable">@color</span>) {
+              <span class="hljs-attribute">color</span>: darken(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);
+            }
+            <span class="hljs-selector-class">.mixin</span> (light, <span class="hljs-variable">@color</span>) {
+              <span class="hljs-attribute">color</span>: lighten(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);
+            }
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@_</span>, <span class="hljs-variable">@color</span>) {
+              <span class="hljs-attribute">display</span>: block;
+            }
+            </span></code></pre>
+            <p><span>现在，如果运行:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@switch:</span> light;
+            
+            <span class="hljs-selector-class">.class</span> {
+              <span class="hljs-selector-class">.mixin</span>(<span class="hljs-variable">@switch</span>, <span class="hljs-number">#888</span>);
+            }
+            </span></code></pre>
+            <p><span>就会得到下列CSS:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-class">.class</span> {
+              <span class="hljs-attribute">color</span>: <span class="hljs-number">#a2a2a2</span>;
+              <span class="hljs-attribute">display</span>: block;
+            }
+            </span></code></pre>
+            <p><span>如上，<code>.mixin</code>就会得到传入颜色的浅色。如果<code>@switch</code>设为dark，就会得到深色。</span></p>
+            <p><span>具体实现如下：</span></p>
+            <ul>
+            <li><span>第一个混合定义并未被匹配，因为它只接受<code>dark</code>做为首参</span></li>
+            <li><span>第二个混合定义被成功匹配，因为它只接受<code>light</code></span></li>
+            <li><span>第三个混合定义被成功匹配，因为它接受任意值</span></li>
+            </ul>
+            <p><span>只有被匹配的混合才会被使用。变量可以匹配任意的传入值，而变量以外的固定值就仅仅匹配与其相等的传入值。</span></p>
+            <p><span>我们也可以匹配多个参数：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) {
+              <span class="hljs-attribute">color</span>: <span class="hljs-variable">@a</span>;
+            }
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>, <span class="hljs-variable">@b</span>) {
+              <span class="hljs-attribute">color</span>: fade(<span class="hljs-variable">@a</span>, <span class="hljs-variable">@b</span>);
+            }
+            </span></code></pre>
+            <p><span>Now if we call&nbsp;<code>.mixin</code>&nbsp;with a single argument, we will get the output of the first definition, but if we call it with&nbsp;<em>two</em>&nbsp;arguments, we will get the second definition, namely&nbsp;<code>@a</code>&nbsp;faded to&nbsp;<code>@b</code>.</span></p>
+            <h3><span>引导</span></h3>
+            <p><span>当我们想根据表达式进行匹配，而非根据值和参数匹配时，导引就显得非常有用。如果你对函数式编程非常熟悉，那么你很可能已经使用过导引。</span></p>
+            <p><span>为了尽可能地保留CSS的可声明性，LESS通过导引混合而非if/else语句来实现条件判断，因为前者已在@media query特性中被定义。</span></p>
+            <p><span>以此例做为开始：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (lightness(<span class="hljs-variable">@a</span>) &gt;= <span class="hljs-number">50%</span>) {
+              <span class="hljs-attribute">background-color</span>: black;
+            }
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (lightness(<span class="hljs-variable">@a</span>) &lt; <span class="hljs-number">50%</span>) {
+              <span class="hljs-attribute">background-color</span>: white;
+            }
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) {
+              <span class="hljs-attribute">color</span>: <span class="hljs-variable">@a</span>;
+            }
+            </span></code></pre>
+            <p><span>when关键字用以定义一个导引序列(此例只有一个导引)。接下来我们运行下列代码：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.class1</span> { <span class="hljs-selector-class">.mixin</span>(<span class="hljs-number">#ddd</span>) }
+            <span class="hljs-selector-class">.class2</span> { <span class="hljs-selector-class">.mixin</span>(<span class="hljs-number">#555</span>) }
+            </span></code></pre>
+            <p><span>就会得到：</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-class">.class1</span> {
+              <span class="hljs-attribute">background-color</span>: black;
+              <span class="hljs-attribute">color</span>: <span class="hljs-number">#ddd</span>;
+            }
+            <span class="hljs-selector-class">.class2</span> {
+              <span class="hljs-attribute">background-color</span>: white;
+              <span class="hljs-attribute">color</span>: <span class="hljs-number">#555</span>;
+            }
+            </span></code></pre>
+            <p><span>导引中可用的全部比较运算有：&nbsp;<strong><code>&gt; &gt;= = =&lt; &lt;</code></strong>。此外，关键字<code>true</code>只表示布尔真值，下面两个混合是相同的：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.truth</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@a</span>) { ... }
+            <span class="hljs-selector-class">.truth</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@a</span> = true) { ... }
+            </span></code></pre>
+            <p><span>除去关键字true以外的值都被视示布尔假：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.class</span> {
+              <span class="hljs-selector-class">.truth</span>(<span class="hljs-number">40</span>); <span class="hljs-comment">// Will not match any of the above definitions.</span>
+            }
+            </span></code></pre>
+            <p><span>导引序列使用逗号‘<code>,</code>’—分割，当且仅当所有条件都符合时，才会被视为匹配成功。</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@a</span> &gt; <span class="hljs-number">10</span>), (<span class="hljs-variable">@a</span> &lt; -<span class="hljs-number">10</span>) { ... }
+            </span></code></pre>
+            <p><span>导引可以无参数，也可以对参数进行比较运算：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-keyword">@media</span>: mobile;
+            
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@media</span> = mobile) { ... }
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@media</span> = desktop) { ... }
+            
+            <span class="hljs-selector-class">.max</span> (<span class="hljs-variable">@a</span>, <span class="hljs-variable">@b</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@a</span> &gt; <span class="hljs-variable">@b</span>) { <span class="hljs-attribute">width</span>: <span class="hljs-variable">@a</span> }
+            <span class="hljs-selector-class">.max</span> (<span class="hljs-variable">@a</span>, <span class="hljs-variable">@b</span>) <span class="hljs-keyword">when</span> (<span class="hljs-variable">@a</span> &lt; <span class="hljs-variable">@b</span>) { <span class="hljs-attribute">width</span>: <span class="hljs-variable">@b</span> }
+            </span></code></pre>
+            <p><span>最后，如果想基于值的类型进行匹配，我们就可以使用is*函式：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>, <span class="hljs-variable">@b</span>: <span class="hljs-number">0</span>) <span class="hljs-keyword">when</span> (isnumber(<span class="hljs-variable">@b</span>)) { ... }
+            <span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>, <span class="hljs-variable">@b</span>: black) <span class="hljs-keyword">when</span> (iscolor(<span class="hljs-variable">@b</span>)) { ... }
+            </span></code></pre>
+            <p><span>下面就是常见的检测函式：</span></p>
+            <ul>
+            <li><code><span>iscolor</span></code></li>
+            <li><code><span>isnumber</span></code></li>
+            <li><code><span>isstring</span></code></li>
+            <li><code><span>iskeyword</span></code></li>
+            <li><code><span>isurl</span></code></li>
+            </ul>
+            <p><span>如果你想判断一个值是纯数字，还是某个单位量，可以使用下列函式：</span></p>
+            <ul>
+            <li><code><span>ispixel</span></code></li>
+            <li><code><span>ispercentage</span></code></li>
+            <li><code><span>isem</span></code></li>
+            </ul>
+            <p><span>最后再补充一点，在导引序列中可以使用<strong><code>and</code></strong>关键字实现与条件：</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@a</span>) <span class="hljs-keyword">when</span> (isnumber(<span class="hljs-variable">@a</span>)) <span class="hljs-keyword">and</span> (<span class="hljs-variable">@a</span> &gt; <span class="hljs-number">0</span>) { ... }
+            </span></code></pre>
+            <p><span>使用<strong><code>not</code></strong>关键字实现或条件</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-class">.mixin</span> (<span class="hljs-variable">@b</span>) <span class="hljs-keyword">when</span> <span class="hljs-keyword">not</span> (<span class="hljs-variable">@b</span> &gt; <span class="hljs-number">0</span>) { ... }
+            </span></code></pre>
+            <h2><span>嵌套规则</span></h2>
+            <p><span>LESS 可以让我们以<em>嵌套</em>的方式编写层叠样式. 让我们先看下下面这段 CSS:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-id">#header</span> { <span class="hljs-attribute">color</span>: black; }
+            <span class="hljs-selector-id">#header</span><span class="hljs-selector-class">.navigation</span> {
+              <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;
+            }
+            <span class="hljs-selector-id">#header</span><span class="hljs-selector-class">.logo</span> { 
+              <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>; 
+            }
+            <span class="hljs-selector-id">#header</span><span class="hljs-selector-class">.logo</span><span class="hljs-selector-pseudo">:hover</span> {
+              <span class="hljs-attribute">text-decoration</span>: none;
+            }
+            </span></code></pre>
+            <p><span>在 LESS 中, 我们就可以这样写:</span></p>
+            <pre><code class="hljs scss"><span><span class="hljs-selector-id">#header</span> {
+              <span class="hljs-attribute">color</span>: black;
+            
+              <span class="hljs-selector-class">.navigation</span> {
+                <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;
+              }
+              <span class="hljs-selector-class">.logo</span> {
+                <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+                &amp;:hover { <span class="hljs-attribute">text-decoration</span>: none }
+              }
+            }
+            </span></code></pre>
+            <p><span>或者这样写:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-id">#header</span>        { <span class="hljs-attribute">color</span>: black;
+              <span class="hljs-selector-class">.navigation</span>  { <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span> }
+              <span class="hljs-selector-class">.logo</span>        { <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+                <span class="hljs-selector-tag">&amp;</span><span class="hljs-selector-pseudo">:hover</span>    { <span class="hljs-attribute">text-decoration</span>: none }
+              }
+            }
+            </span></code></pre>
+            <p><span>代码更简洁了，而且感觉跟<code>DOM</code>结构格式有点像.</span></p>
+            <p><span>注意&nbsp;<code>&amp;</code>&nbsp;符号的使用—如果你想写串联选择器，而不是写后代选择器，就可以用到<code>&amp;</code>了. 这点对伪类尤其有用如<code>:hover</code>&nbsp;和&nbsp;<code>:focus</code>.</span></p>
+            <p><span>例如:</span></p>
+            <pre><code class="hljs scss"><span><span class="hljs-selector-class">.bordered</span> {
+              &amp;<span class="hljs-selector-class">.float</span> {
+                <span class="hljs-attribute">float</span>: left; 
+              }
+              <span class="hljs-selector-class">.top</span> {
+                <span class="hljs-attribute">margin</span>: <span class="hljs-number">5px</span>; 
+              }
+            }
+            </span></code></pre>
+            <p><span>会输出</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-class">.bordered</span><span class="hljs-selector-class">.float</span> {
+              <span class="hljs-attribute">float</span>: left;  
+            }
+            <span class="hljs-selector-class">.bordered</span><span class="hljs-selector-class">.top</span> {
+              <span class="hljs-attribute">margin</span>: <span class="hljs-number">5px</span>;
+            }
+            </span></code></pre>
+            <h2><span>运算</span></h2>
+            <p><span>任何数字、颜色或者变量都可以参与运算. 来看一组例子:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@base:</span> <span class="hljs-number">5%</span>;
+            <span class="hljs-variable">@filler:</span> <span class="hljs-variable">@base</span> * <span class="hljs-number">2</span>;
+            <span class="hljs-variable">@other:</span> <span class="hljs-variable">@base</span> + <span class="hljs-variable">@filler</span>;
+            
+            <span class="hljs-attribute">color</span>: <span class="hljs-number">#888</span> / <span class="hljs-number">4</span>;
+            <span class="hljs-attribute">background-color</span>: <span class="hljs-variable">@base-color</span> + <span class="hljs-number">#111</span>;
+            <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span> / <span class="hljs-number">2</span> + <span class="hljs-variable">@filler</span>;
+            </span></code></pre>
+            <p><span>LESS 的运算已经超出了我们的期望，它能够分辨出颜色和单位。如果像下面这样单位运算的话:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@var:</span> <span class="hljs-number">1px</span> + <span class="hljs-number">5</span>;
+            </span></code></pre>
+            <p><span>LESS 会输出&nbsp;<code>6px</code>.</span></p>
+            <p><span>括号也同样允许使用:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-attribute">width</span>: (<span class="hljs-variable">@var</span> + <span class="hljs-number">5</span>) * <span class="hljs-number">2</span>;
+            </span></code></pre>
+            <p><span>并且可以在复合属性中进行运算:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-attribute">border</span>: (<span class="hljs-variable">@width</span> * <span class="hljs-number">2</span>) solid black;
+            </span></code></pre>
+            <h2><span>Color 函数</span></h2>
+            <p><span>LESS 提供了一系列的颜色运算函数. 颜色会先被转化成&nbsp;<em>HSL</em>&nbsp;色彩空间, 然后在通道级别操作:</span></p>
+            <pre><code class="hljs less"><span>
+            <span class="hljs-selector-tag">lighten</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);     <span class="hljs-comment">// return a color which is 10% *lighter* than @color</span>
+            <span class="hljs-selector-tag">darken</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);      <span class="hljs-comment">// return a color which is 10% *darker* than @color</span>
+            
+            <span class="hljs-selector-tag">saturate</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);    <span class="hljs-comment">// return a color 10% *more* saturated than @color</span>
+            <span class="hljs-selector-tag">desaturate</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);  <span class="hljs-comment">// return a color 10% *less* saturated than @color</span>
+            
+            <span class="hljs-selector-tag">fadein</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);      <span class="hljs-comment">// return a color 10% *less* transparent than @color</span>
+            <span class="hljs-selector-tag">fadeout</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10%</span>);     <span class="hljs-comment">// return a color 10% *more* transparent than @color</span>
+            <span class="hljs-selector-tag">fade</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">50%</span>);        <span class="hljs-comment">// return @color with 50% transparency</span>
+            
+            <span class="hljs-selector-tag">spin</span>(<span class="hljs-variable">@color</span>, <span class="hljs-number">10</span>);         <span class="hljs-comment">// return a color with a 10 degree larger in hue than @color</span>
+            <span class="hljs-selector-tag">spin</span>(<span class="hljs-variable">@color</span>, -<span class="hljs-number">10</span>);        <span class="hljs-comment">// return a color with a 10 degree smaller hue than @color</span>
+            
+            <span class="hljs-selector-tag">mix</span>(<span class="hljs-variable">@color1</span>, <span class="hljs-variable">@color2</span>);    <span class="hljs-comment">// return a mix of @color1 and @color2</span></span></code></pre>
+            <p><span>使用起来相当简单:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@base:</span> <span class="hljs-number">#f04615</span>;
+            
+            <span class="hljs-selector-class">.class</span> {
+              <span class="hljs-attribute">color</span>: saturate(<span class="hljs-variable">@base</span>, <span class="hljs-number">5%</span>);
+              <span class="hljs-attribute">background-color</span>: lighten(spin(<span class="hljs-variable">@base</span>, <span class="hljs-number">8</span>), <span class="hljs-number">25%</span>);
+            }
+            </span></code></pre>
+            <p><span>你还可以提取颜色信息:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-tag">hue</span>(<span class="hljs-variable">@color</span>);        <span class="hljs-comment">// returns the `hue` channel of @color</span>
+            <span class="hljs-selector-tag">saturation</span>(<span class="hljs-variable">@color</span>); <span class="hljs-comment">// returns the `saturation` channel of @color</span>
+            <span class="hljs-selector-tag">lightness</span>(<span class="hljs-variable">@color</span>);  <span class="hljs-comment">// returns the 'lightness' channel of @color</span></span></code></pre>
+            <p><span>如果你想在一种颜色的通道上创建另一种颜色，这些函数就显得那么的好用，例如:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@new:</span> hsl(hue(<span class="hljs-variable">@old</span>), <span class="hljs-number">45%</span>, <span class="hljs-number">90%</span>);
+            </span></code></pre>
+            <p><span><code>@new</code>&nbsp;将会保持&nbsp;<code>@old</code>的&nbsp;<em>色调</em>, 但是具有不同的饱和度和亮度.</span></p>
+            <h2><span>Math 函数</span></h2>
+            <p><span>LESS提供了一组方便的数学函数，你可以使用它们处理一些数字类型的值:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-tag">round</span>(<span class="hljs-number">1.67</span>); <span class="hljs-comment">// returns `2`</span>
+            <span class="hljs-selector-tag">ceil</span>(<span class="hljs-number">2.4</span>);   <span class="hljs-comment">// returns `3`</span>
+            <span class="hljs-selector-tag">floor</span>(<span class="hljs-number">2.6</span>);  <span class="hljs-comment">// returns `2`</span></span></code></pre>
+            <p><span>如果你想将一个值转化为百分比，你可以使用<code>percentage</code>&nbsp;函数:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-selector-tag">percentage</span>(<span class="hljs-number">0.5</span>); <span class="hljs-comment">// returns `50%`</span></span></code></pre>
+            <h2><span>命名空间</span></h2>
+            <p><span>有时候，你可能为了更好组织CSS或者单纯是为了更好的封装，将一些变量或者混合模块打包起来, 你可以像下面这样在<code>#bundle</code>中定义一些属性集之后可以重复使用:</span></p>
+            <pre><code class="hljs scss"><span><span class="hljs-selector-id">#bundle</span> {
+              <span class="hljs-selector-class">.button</span> () {
+                <span class="hljs-attribute">display</span>: block;
+                <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
+                <span class="hljs-attribute">background-color</span>: grey;
+                &amp;:hover { <span class="hljs-attribute">background-color</span>: white }
+              }
+              .tab { ... }
+              .citation { ... }
+            }
+            </span></code></pre>
+            <p><span>你只需要在&nbsp;<code>#header a</code>中像这样引入&nbsp;<code>.button</code>:</span></p>
+            <pre><code class="hljs shell"><span><span class="hljs-meta">#</span><span class="bash">headera {</span>
+              color: orange;
+            <span class="hljs-meta">  #</span><span class="bash">bundle &gt; .button;</span>
+            }
+            </span></code></pre>
+            <h2><span>作用域</span></h2>
+            <p><span>LESS 中的作用域跟其他编程语言非常类似，首先会从本地查找变量或者混合模块，如果没找到的话会去父级作用域中查找，直到找到为止.</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@var:</span> red;
+            
+            <span class="hljs-selector-id">#page</span> {
+              <span class="hljs-variable">@var:</span> white;
+              <span class="hljs-selector-id">#header</span> {
+                <span class="hljs-attribute">color</span>: <span class="hljs-variable">@var</span>; <span class="hljs-comment">// white</span>
+              }
+            }
+            
+            <span class="hljs-selector-id">#footer</span> {
+              <span class="hljs-attribute">color</span>: <span class="hljs-variable">@var</span>; <span class="hljs-comment">// red  </span>
+            }
+            </span></code></pre>
+            <h2><span>注释</span></h2>
+            <p><span>CSS 形式的注释在 LESS 中是依然保留的:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-comment">/* Hello, I'm a CSS-style comment */</span><span class="hljs-selector-class">.class</span> { <span class="hljs-attribute">color</span>: black }
+            </span></code></pre>
+            <p><span>LESS 同样也支持双斜线的注释, 但是编译成 CSS 的时候自动过滤掉:</span></p>
+            <pre><code class="hljs javascript"><span><span class="hljs-comment">// Hi, I'm a silent comment, I won't show up in your CSS.class { color: white }</span>
+            </span></code></pre>
+            <h2><span>Importing</span></h2>
+            <p><span>你可以在main文件中通过下面的形势引入&nbsp;<code>.less</code>&nbsp;文件,&nbsp;<code>.less</code>&nbsp;后缀可带可不带:</span></p>
+            <pre><code class="hljs css"><span>@<span class="hljs-keyword">import</span> <span class="hljs-string">"lib.less"</span>;
+            @<span class="hljs-keyword">import</span> <span class="hljs-string">"lib"</span>;
+            </span></code></pre>
+            <p><span>如果你想导入一个CSS文件而且不想LESS对它进行处理，只需要使用<code>.css</code>后缀就可以:</span></p>
+            <pre><code class="hljs css"><span>@<span class="hljs-keyword">import</span> <span class="hljs-string">"lib.css"</span>;
+            </span></code></pre>
+            <p><span>这样LESS就会跳过它不去处理它.</span></p>
+            <h2><span>字符串插值</span></h2>
+            <p><span>变量可以用类似ruby和php的方式嵌入到字符串中，像<code>@{name}</code>这样的结构:</span></p>
+            <pre><code class="hljs less"><span><span class="hljs-variable">@base-url:</span> <span class="hljs-string">"http://assets.fnord.com"</span>;
+            <span class="hljs-attribute">background-image</span>: url(<span class="hljs-string">"@{base-url}/images/bg.png"</span>);
+            </span></code></pre>
+            <h2><span>避免编译</span></h2>
+            <p><span>有时候我们需要输出一些不正确的CSS语法或者使用一些 LESS不认识的专有语法.</span></p>
+            <p><span>要输出这样的值我们可以在字符串前加上一个&nbsp;<code>~</code>, 例如:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-class">.class</span> {
+              <span class="hljs-attribute">filter</span>: ~<span class="hljs-string">"ms:alwaysHasItsOwnSyntax.For.Stuff()"</span>;
+            }
+            </span></code></pre>
+            <p><span>我们可以将要避免编译的值用 “”包含起来，输出结果为:</span></p>
+            <pre><code class="hljs css"><span><span class="hljs-selector-class">.class</span> {
+              <span class="hljs-attribute">filter</span>: ms:alwaysHasItsOwnSyntax.For.<span class="hljs-built_in">Stuff</span>();
+            }<br></span></code></pre>
+            <p><span>其他的详见less中国官网：</span></p>
+            <p><a href="http://www.lesscss.net/"><span>http://www.lesscss.net/</span></a></p>
+            <pre><code class="hljs"><span>&nbsp;</span></code></pre>
+            </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/*page7*/
+#cnblogs_post_body {
+  color: #333;
+  line-height: 1.8;
+}
+#cnblogs_post_body {
+  word-break: break-word;
+}
+#cnblogs_post_body {
+  margin-bottom: 20px;
+}
+.hljs-comment,
+.hljs-quote,
+.hljs-variable {
+  color: #008000;
+}
